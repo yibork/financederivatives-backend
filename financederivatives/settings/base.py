@@ -22,6 +22,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 
 # Application definition
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 INSTALLED_APPS = [
     "home",
@@ -50,13 +52,7 @@ INSTALLED_APPS = [
     "rest_framework",
 
 ]
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'y.ibork1@gmail.com'
-EMAIL_HOST_PASSWORD = 'ccdawixitxpgoxeh'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'y.ibork1@gmail.com'
+
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

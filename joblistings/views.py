@@ -13,6 +13,8 @@ from django.http import JsonResponse
 from django.views import View
 from django.core.management import call_command
 from django.core.files.storage import default_storage
+from rest_framework import viewsets
+
 
 
 class ExcelUploadView(View):
@@ -77,6 +79,6 @@ class JobImportView(FormView):
         # ... additional context data setup ...
         return context
 
-class JobPageList(ListAPIView):
+class JobPageViewSet(viewsets.ModelViewSet):
     queryset = JobPage.objects.live().public().order_by('-first_published_at')
     serializer_class = JobPageSerializer

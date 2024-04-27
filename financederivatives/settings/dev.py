@@ -16,6 +16,8 @@ EMAIL_HOST_PASSWORD = 'ccdawixitxpgoxeh'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'y.ibork1@gmail.com'
+EMAIL_BACKEND = 'joblistings.backends.NoVerifyEmailBackend'
+
 
 
 try:
