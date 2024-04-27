@@ -1,0 +1,20 @@
+<!-- templates/job_import.html -->
+{% extends "wagtailadmin/admin_base.html" %}
+{% load i18n wagtailadmin_tags %}  <!-- Make sure to load the i18n tag library -->
+
+{% block content %}
+    <header class="nice-padding hasform">
+        <div class="row header-title">
+            <div class="col">
+                <h1 class="icon icon-download">{% trans "Import Jobs" %}</h1>
+            </div>
+        </div>
+    </header>
+    <div class="nice-padding">
+        <form action="{% url 'job_import' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="button">{% trans "Import" %}</button>
+        </form>
+    </div>
+{% endblock %}

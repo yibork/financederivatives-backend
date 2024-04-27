@@ -1,0 +1,17 @@
+<!-- job_index_page.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <ul>
+        {% for job in page.get_children.live %}
+            <li>
+                <a href="{% pageurl job %}">{{ job.job_title }}</a>
+                <p>{{ job.company_name }}</p>
+                <!-- Add other job details you want to list -->
+            </li>
+        {% empty %}
+            <li>No job pages have been created yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

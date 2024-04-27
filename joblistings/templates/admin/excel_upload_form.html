@@ -1,0 +1,40 @@
+{% extends "wagtailadmin/base.html" %}
+{% load static wagtailadmin_tags %}
+
+{% block content %}
+<div class="nice-padding">
+    <div class="row">
+        <div class="col">
+            <h1 class="icon icon-upload">Upload Excel File for Job Import</h1>
+        </div>
+    </div>
+    <form action="{% url 'upload_excel' %}" method="post" enctype="multipart/form-data" class="dropzone">
+        {% csrf_token %}
+        <div class="input">
+            <label for="excel_file">Choose Excel file to upload</label>
+            <input id="excel_file" type="file" name="excel_file" required>
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Upload and Import" class="button" />
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .input {
+        margin-bottom: 1.5em;
+    }
+
+    .input label {
+        display: block;
+        margin-bottom: .5em;
+    }
+
+    .submit-row {
+        margin-top: 1.5em;
+    }
+</style>
+{% endblock %}

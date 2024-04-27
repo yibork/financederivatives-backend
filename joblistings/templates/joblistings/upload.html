@@ -1,0 +1,21 @@
+{% extends "wagtailadmin/admin_base.html" %}
+{% load i18n wagtailadmin_tags %}
+
+{% block titletag %}{% trans "Upload Jobs" %}{% endblock %}
+
+{% block bodyclass %}finance-jobs-upload{% endblock %}
+
+{% block content %}
+    <header class="nice-padding has-form-actions">
+        <h1 class="h2">{% trans 'Upload Jobs' %}</h1>
+    </header>
+    <div class="nice-padding">
+        <form action="{% url 'finance_jobs:upload_jobs' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <ul class="actions">
+                <li><button type="submit" class="button">{% trans 'Upload' %}</button></li>
+            </ul>
+        </form>
+    </div>
+{% endblock %}
