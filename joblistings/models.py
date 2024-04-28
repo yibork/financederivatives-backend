@@ -39,6 +39,7 @@ class JobPage(Page):
     how_to_apply = RichTextField(blank=True)
     post_date = models.DateField(blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     ex_current_intern_link = models.URLField(blank=True)
     ex_current_linkedin_link = models.URLField(blank=True)
     professional_1_name = models.CharField(max_length=255, blank=True)
@@ -48,6 +49,8 @@ class JobPage(Page):
     contact_person_2_linkedin = models.URLField(blank=True)
     contact_person_3_name = models.CharField(max_length=255, blank=True)
     contact_person_3_linkedin = models.URLField(blank=True)
+    mail_professional_2 = models.EmailField(blank=True)
+    mail_professional_3 = models.EmailField(blank=True)
     link_linkedin_offer = models.URLField(blank=True)
     template = "joblistings/job_page.html"
 
@@ -76,6 +79,7 @@ class JobPage(Page):
         FieldPanel('how_to_apply'),
         FieldPanel('post_date'),
         FieldPanel('start_date'),
+        FieldPanel('end_date'),
         FieldPanel('ex_current_intern_link'),
         FieldPanel('ex_current_linkedin_link'),
         FieldPanel('professional_1_name'),
@@ -83,8 +87,10 @@ class JobPage(Page):
         FieldPanel('mail_professional_1'),
         FieldPanel('contact_person_2_name'),
         FieldPanel('contact_person_2_linkedin'),
+        FieldPanel('mail_professional_2'),
         FieldPanel('contact_person_3_name'),
         FieldPanel('contact_person_3_linkedin'),
+        FieldPanel('mail_professional_3'),
         FieldPanel('link_linkedin_offer'),
     ]
 
