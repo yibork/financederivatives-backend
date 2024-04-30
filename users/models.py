@@ -1,20 +1,18 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
+# views.py
+from django.contrib.auth import authenticate, login
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 
-class Role(models.Model):
-
-    name = models.CharField(max_length=100) 
-    description = models.CharField(max_length=500) 
-
-    def __str__(self):
-        return self.name
-
-class User(AbstractUser):
-    
-    phone_number = models.CharField(max_length=20) 
-    address = models.CharField(max_length=200) 
-    role_id = models.ForeignKey(Role,on_delete=models.CASCADE,null=True,blank=True)   #
-    picture = models.ImageField(upload_to='images/', null=True, blank=True)
-
-    def __str__(self):
-        return self.username
+@api_view(['POST'])
+def login_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)

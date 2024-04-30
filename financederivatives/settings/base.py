@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.modeladmin",
     "rest_framework",
     'corsheaders',
+    'rest_framework.authtoken',
 
 ]
 REST_FRAMEWORK = {
