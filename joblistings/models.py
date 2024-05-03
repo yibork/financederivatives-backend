@@ -42,7 +42,7 @@ class JobPage(Page):
     end_date = models.DateField(blank=True, null=True)
     ex_current_intern_link = models.URLField(blank=True)
     ex_current_linkedin_link = models.URLField(blank=True)
-    professional_1_name = models.CharField(max_length=255, blank=True)
+    contact_person_1_name = models.CharField(max_length=255, blank=True)
     contact_person_1_linkedin = models.URLField(blank=True)
     mail_professional_1 = models.EmailField(blank=True)
     contact_person_2_name = models.CharField(max_length=255, blank=True)
@@ -82,7 +82,7 @@ class JobPage(Page):
         FieldPanel('end_date'),
         FieldPanel('ex_current_intern_link'),
         FieldPanel('ex_current_linkedin_link'),
-        FieldPanel('professional_1_name'),
+        FieldPanel('contact_person_1_name'),
         FieldPanel('contact_person_1_linkedin'),
         FieldPanel('mail_professional_1'),
         FieldPanel('contact_person_2_name'),
