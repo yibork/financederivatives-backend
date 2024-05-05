@@ -19,6 +19,8 @@ class JobPage(Page):
     company_name = models.CharField(max_length=255, blank=True)
     location = models.CharField(max_length=255, blank=True)
     profile = RichTextField(blank=True)
+    position = models.CharField(max_length=255, blank=True)
+    coding_language = models.CharField(max_length=255, blank=True)
     job_type = models.CharField(max_length=255, blank=True)
     industry = models.CharField(max_length=255, blank=True)
     department = models.CharField(max_length=255, blank=True)
@@ -43,11 +45,14 @@ class JobPage(Page):
     ex_current_intern_link = models.URLField(blank=True)
     ex_current_linkedin_link = models.URLField(blank=True)
     contact_person_1_name = models.CharField(max_length=255, blank=True)
+    contact_person_1_role = models.CharField(max_length=255, blank=True)
     contact_person_1_linkedin = models.URLField(blank=True)
     mail_professional_1 = models.EmailField(blank=True)
     contact_person_2_name = models.CharField(max_length=255, blank=True)
+    contact_person_2_role = models.CharField(max_length=255, blank=True)
     contact_person_2_linkedin = models.URLField(blank=True)
     contact_person_3_name = models.CharField(max_length=255, blank=True)
+    contact_person_3_role = models.CharField(max_length=255, blank=True)
     contact_person_3_linkedin = models.URLField(blank=True)
     mail_professional_2 = models.EmailField(blank=True)
     mail_professional_3 = models.EmailField(blank=True)
@@ -59,6 +64,8 @@ class JobPage(Page):
         FieldPanel('company_name'),
         FieldPanel('location'),
         FieldPanel('profile'),
+        FieldPanel('position'),
+        FieldPanel('coding_language'),
         FieldPanel('job_type'),
         FieldPanel('industry'),
         FieldPanel('department'),
@@ -83,12 +90,15 @@ class JobPage(Page):
         FieldPanel('ex_current_intern_link'),
         FieldPanel('ex_current_linkedin_link'),
         FieldPanel('contact_person_1_name'),
+        FieldPanel('contact_person_1_role'),
         FieldPanel('contact_person_1_linkedin'),
         FieldPanel('mail_professional_1'),
         FieldPanel('contact_person_2_name'),
+        FieldPanel('contact_person_2_role'),
         FieldPanel('contact_person_2_linkedin'),
         FieldPanel('mail_professional_2'),
         FieldPanel('contact_person_3_name'),
+        FieldPanel('contact_person_3_role'),
         FieldPanel('contact_person_3_linkedin'),
         FieldPanel('mail_professional_3'),
         FieldPanel('link_linkedin_offer'),
