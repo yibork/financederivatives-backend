@@ -20,4 +20,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('import-jobs/', JobImportView.as_view(), name='job_import'),
     path('upload_excel/', ExcelUploadView.as_view(), name='upload_excel'),
+
 ]
