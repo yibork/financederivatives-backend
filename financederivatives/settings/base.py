@@ -49,11 +49,36 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "joblistings",
+    "users",
     "wagtail.contrib.modeladmin",
     "rest_framework",
     'corsheaders',
+    'social_django',
+
 
 ]
+AUTH_USER_MODEL = 'users.User'
+WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
+WAGTAIL_USER_CREATION_FORM='users.forms.CustomUserCreationForm'
+WAGTAIL_USER_CUSTOM_FIELDS = ['role', 'phone_number', 'address', 'picture']
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.linkedin.LinkedinOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '78tcgu4rk3xw1b'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'WPL_AP0.r5Yda9a4iEdCd1FG.MzIxODkzNTQ5NA=='
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ["r_basicprofile"]
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['emailAddress', 'headline', 'id', 'firstName', 'lastName']
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
+#                                           ('firstName', 'first_name'),
+#                                           ('lastName', 'last_name'),
+#                                           ('emailAddress', 'email_address'),
+#                                           ('headline', 'headline')]
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
