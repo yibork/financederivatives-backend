@@ -1,18 +1,28 @@
-# views.py
-from django.contrib.auth import authenticate, login
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
+# myapp/models.py
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 
-@api_view(['POST'])
-def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        login(request, user)
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key}, status=status.HTTP_200_OK)
-    else:
-        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+ 
+
+class User(AbstractUser):
+    ADMIN = 'admin'
+    SUBSCRIBED_USER = 'subscribed_user'
+    NORMAL_USER = 'normal_user'
+
+    ROLE_CHOICES = [
+        (ADMIN, 'Admin'),
+        (SUBSCRIBED_USER, 'Subscribed User'),
+        (NORMAL_USER, 'Normal User'),
+    ]
+
+    phone_number = models.CharField(max_length=20, unique=True, default='Unknown')
+    address = models.CharField(max_length=255, blank=True)
+    role = models.CharField(
+        max_length=50,
+        choices=ROLE_CHOICES,
+        default=NORMAL_USER
+    )
+    picture = models.ImageField(upload_to='profile_pictures/%Y/%m/%d/', null=True, blank=True)
+
+    def __str__(self):
+        return self.username
