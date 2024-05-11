@@ -1,7 +1,6 @@
 from rest_framework import routers
-from .views import UserRegister, MyTokenObtainPairView, VerifyTokenView, TestView
+from .views import UserRegister, MyTokenObtainPairView, VerifyTokenView, TestView, UserRoleView
 from django.urls import path
-from .views import login_view
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
@@ -14,6 +13,6 @@ urlpatterns = [
     path('verify/', VerifyTokenView.as_view(), name='token_verify'),
     path('admin/create_user/', UserRegister.as_view(), name='admin-create-user'),
     path('test/', TestView.as_view(), name='test'),
-    path('api/login/', login_view, name='login'),
+    path('role/', UserRoleView.as_view(), name='role'),
 
 ]
