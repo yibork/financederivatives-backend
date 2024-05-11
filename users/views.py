@@ -78,7 +78,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 class UserRegister(APIView):
-    permission_classes = [IsAdminUser]
 
     def post(self, request):
 
