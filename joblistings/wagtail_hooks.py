@@ -2,7 +2,7 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from .models import JobPage
 from wagtail import hooks
-from .views import JobImportView
+#from .views import JobImportView
 from django.urls import path
 from wagtail.admin.menu import MenuItem
 from django.core.mail import send_mail

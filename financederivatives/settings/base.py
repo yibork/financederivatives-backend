@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "rest_framework",
     'corsheaders',
     'rest_framework.authtoken',
+    'debug_toolbar',
 
 ]
 REST_FRAMEWORK = {
@@ -75,7 +76,12 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
