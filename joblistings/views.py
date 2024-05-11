@@ -203,6 +203,44 @@ class JobImportView(FormView):
         context = super().get_context_data(**kwargs)
         # ... additional context data setup ...
         return context
+class JobImportView(FormView):
+    template_name = 'job_import.html'
+    form_class = JobImportForm
+    success_url = reverse_lazy('wagtailadmin_home')  # Redirect to Wagtail admin home
+
+    def form_valid(self, form):
+        try:
+            excel_file = form.cleaned_data['excel_file']
+            wb = load_workbook(filename=excel_file)
+            ws = wb.active
+            job_index_page = JobIndexPage.objects.live().first()
+
+            if not job_index_page:
+                return error(self.request, "Job Index Page does not exist.")
+
+            for row in ws.iter_rows(min_row=2, values_only=True):
+                job_page_data = {
+                    'title': row[0],
+                    'job_title': row[0],
+                    'company_name': row[1],
+                    'location': row[2],
+                    # ... other fields ...
+                }
+                job_page = JobPage(**job_page_data)
+                job_index_page.add_child(instance=job_page)
+                job_page.save_revision().publish()
+
+            success(self.request, "Jobs imported successfully.")
+        except Exception as e:
+            error(self.request, f"An error occurred: {e}")
+            return super().form_invalid(form)
+
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # ... additional context data setup ...
+        return context
 
 class JobPageViewSet(viewsets.ModelViewSet):
     queryset = JobPage.objects.live().public().order_by('-first_published_at')
