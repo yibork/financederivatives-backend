@@ -6,7 +6,7 @@ from .base import *
 SECRET_KEY = "django-insecure-t%!plxq5z3fg8xl_yq#xxgfo$6%erfn@m^j0mq^_c&&z)(-5q4"
 
 # SECURITY WARNING: define the correct hosts in production!
-
+ALLOWED_HOSTS = ["*"]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'y.ibork1@gmail.com'

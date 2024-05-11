@@ -4,3 +4,4 @@ pandas
 certifi
 social-auth-app-django
 requests-oauthlib
+django-debug-toolbar
