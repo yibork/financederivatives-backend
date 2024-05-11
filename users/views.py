@@ -10,13 +10,29 @@ from django.utils.timezone import now
 from rest_framework_simplejwt.serializers import TokenVerifySerializer
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
+from rest_framework import viewsets
+
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 
+# views.py
+from rest_framework import viewsets
+from .models import User
+from .serializers import UserSerializer, UserInfoSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return UserInfoSerializer
+        return UserSerializer
+    
 class IsAdminUser(permissions.BasePermission):
     """
     Allows access only to admin users.
@@ -24,7 +40,11 @@ class IsAdminUser(permissions.BasePermission):
     def has_permission(self, request, view):
         print(request.user)
 
-        return bool(request.user and request.user.is_authenticated and request.user.is_staff)
+        return bool(request.user and request.user.is_authenticated and request.user.role == 'admin')
+
+class UserList(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class VerifyTokenView(APIView):
@@ -50,6 +70,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['last_name'] = user.last_name
         token['email'] = user.email
         token['id'] = user.id
+        token['role'] = user.role
         token['picture'] = user.picture.url if user.picture else None
         return token
 

@@ -2,3 +2,6 @@ Django>=4.2,<5.1
 wagtail==5.0
 pandas
 certifi
+social-auth-app-django
+requests-oauthlib
+django-debug-toolbar
