@@ -57,6 +57,9 @@ INSTALLED_APPS = [
 
 
 ]
+CORS_ALLOW_ALL_ORIGINS = True
+
+
 AUTH_USER_MODEL = 'users.User'
 WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM='users.forms.CustomUserCreationForm'
@@ -100,6 +103,8 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+        "corsheaders.middleware.CorsMiddleware",
+    'django.middleware.common.CommonMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -108,13 +113,14 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
+ALLOWED_HOSTS=['*']
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+
 
 ROOT_URLCONF = "financederivatives.urls"
-CORS_ALLOW_ALL_ORIGINS = True
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",

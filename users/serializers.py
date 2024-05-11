@@ -1,15 +1,11 @@
-# serializers.py
 from .models import User
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'picture', 'first_name', 'last_name', 'role']
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'role': {'read_only': True},  # Optionally make role read-only here
-        }
+        fields = ['username', 'email','password', 'picture','first_name','last_name']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User(
@@ -18,16 +14,13 @@ class UserSerializer(serializers.ModelSerializer):
             picture=validated_data.get('picture'),
             first_name=validated_data.get('first_name'),
             last_name=validated_data.get('last_name'),
-            role='normal_user'
         )
         user.set_password(validated_data['password'])
         user.save()
         return user
 
 class UserInfoSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
-        fields = '__all__'
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
+        fields = ['email', 'first_name', 'last_name', 'role','picture']
