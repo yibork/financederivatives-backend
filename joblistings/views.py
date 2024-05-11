@@ -37,23 +37,26 @@ project_id = 'projects/dashboard-finance-derivatives'
 
 def job_search(request):
     # Hardcoding the job type in the query
-    search_term = 'engineer' # Using default if not specified
-    user_id = 'user123' # Django's authenticated user ID
-    session_id = 'session123'  # Django's session ID
+    search_term = request.GET.get('search_term', 'Engineer')  # Default to 'Engineer' if not specified
+    job_categories = ['COMPUTER_AND_IT']  # Example category, adjust as necessary
+
     request_metadata = {
-        'session_id': session_id,
-        'user_id': user_id
+        'domain': 'example.com',
+        'session_id': 'session123',
+        'user_id': 'user123'
     }
 
-    job_query = {'query': search_term, 'jobType': 'FULL_TIME'}  # Hardcoded jobType
+    job_query = {
+        'query': search_term,
+        'jobCategories': job_categories  # Use jobCategories instead of jobType
+    }
 
-    # Setting up the request body with hardcoded jobType
     body = {
         'searchMode': 'JOB_SEARCH',
         'requestMetadata': request_metadata,
         'jobQuery': job_query,
-        'jobView': 'JOB_VIEW_SMALL',  # Full job view
-        'pageSize': 20  # Number of results to return
+        'jobView': 'JOB_VIEW_FULL',
+        'pageSize': 20
     }
 
     response = client_service.projects().jobs().search(
