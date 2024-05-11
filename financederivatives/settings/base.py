@@ -49,39 +49,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "joblistings",
-    "users",
     "wagtail.contrib.modeladmin",
     "rest_framework",
     'corsheaders',
-    'social_django',
-
+    'rest_framework.authtoken',
+    'debug_toolbar',
 
 ]
-CORS_ALLOW_ALL_ORIGINS = True
-
-
-AUTH_USER_MODEL = 'users.User'
-WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
-WAGTAIL_USER_CREATION_FORM='users.forms.CustomUserCreationForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['role', 'phone_number', 'address', 'picture']
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.linkedin.LinkedinOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '78tcgu4rk3xw1b'
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'WPL_AP0.r5Yda9a4iEdCd1FG.MzIxODkzNTQ5NA=='
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ["r_basicprofile"]
-# SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['emailAddress', 'headline', 'id', 'firstName', 'lastName']
-# SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
-#                                           ('firstName', 'first_name'),
-#                                           ('lastName', 'last_name'),
-#                                           ('emailAddress', 'email_address'),
-#                                           ('headline', 'headline')]
-
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -102,9 +76,12 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 MIDDLEWARE = [
-        "corsheaders.middleware.CorsMiddleware",
-    'django.middleware.common.CommonMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -113,14 +90,13 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
-ALLOWED_HOSTS=['*']
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-
-
 
 ROOT_URLCONF = "financederivatives.urls"
+CORS_ALLOW_ALL_ORIGINS = True
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
