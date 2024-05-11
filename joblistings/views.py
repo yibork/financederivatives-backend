@@ -37,7 +37,7 @@ project_id = 'projects/dashboard-finance-derivatives'
 
 def job_search(request):
     # Hardcoding the job type in the query
-    search_term = request.GET.get('search_term', 'Engineer')  # Default to 'Engineer' if not specified
+    search_term = 'Engineer'  # Default to 'Engineer' if not specified
     job_categories = ['COMPUTER_AND_IT']  # Example category, adjust as necessary
 
     request_metadata = {
