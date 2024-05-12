@@ -26,6 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 import requests
+import json
 
 # Configure your Google Cloud credentials
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -39,7 +40,8 @@ client_service = build('jobs', 'v3', credentials=credentials)
 project_id = 'projects/dashboard-finance-derivatives'
 
 #fetch data from indeed
-def fetch_indeed_jobs():
+def fetch_indeed_jobs(request):
+    file_path = 'indeed_jobs.json'
     url = "https://indeed11.p.rapidapi.com/"
     payload = {
         "search_terms": "Engineer",
@@ -52,6 +54,11 @@ def fetch_indeed_jobs():
         "X-RapidAPI-Host": "indeed11.p.rapidapi.com"
     }
     response = requests.post(url, json=payload, headers=headers)
+    data = response.json()
+    # Save or overwrite the fetched data to a file
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=4)
+
     return response.json()
 
 
@@ -80,9 +87,20 @@ def transform_to_google_format(indeed_jobs):
         
 def post_indeed_jobs_to_google(request):
     # Fetch jobs from Indeed (assuming `fetch_indeed_jobs()` is already implemented)
-    indeed_jobs = fetch_indeed_jobs()
-    print('Indeed jobs: ', indeed_jobs)
-    return JsonResponse({'Jobs': indeed_jobs})
+    file_path = 'indeed_jobs.json'  # The path to the JSON file where the jobs are stored
+    
+    try:
+        # Try to open and read the JSON file
+        with open(file_path, 'r') as file:
+            indeed_jobs = json.load(file)
+        print('Indeed jobs from file: ', indeed_jobs)
+        return JsonResponse({'Jobs': indeed_jobs})
+    except FileNotFoundError:
+        # If the file is not found, perhaps handle it or return an error
+        return JsonResponse({'error': 'Job data file not found'}, status=404)
+    except json.JSONDecodeError:
+        # Handle cases where the JSON data is corrupted or improperly formatted
+        return JsonResponse({'error': 'Error decoding JSON data'}, status=500)
     # rest of the code for case of storing data in
     google_jobs = transform_to_google_format(indeed_jobs)
     body = {"jobs": google_jobs}
@@ -243,5 +261,18 @@ class JobImportView(FormView):
         return context
 
 class JobPageViewSet(viewsets.ModelViewSet):
-    queryset = JobPage.objects.live().public().order_by('-first_published_at')
     serializer_class = JobPageSerializer
+
+    def get_queryset(self):
+        """
+        Optionally filter the pages to those that are public based on a condition.
+        For example, the condition can be based on a query parameter or a setting.
+        """
+        queryset = JobPage.objects.live()
+
+        # Here we check a condition - for example, checking a query parameter
+        if 'public' in self.request.query_params:
+            # Only return public pages if 'public' query parameter is provided
+            return queryset.public().order_by('-first_published_at')
+        else:
+            return queryset.all()

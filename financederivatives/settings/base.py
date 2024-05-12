@@ -49,14 +49,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "joblistings",
-    "wagtail.contrib.modeladmin",
     "rest_framework",
     'corsheaders',
     'rest_framework.authtoken',
     'debug_toolbar',
     'users',
+    "wagtail_modeladmin",
 
 ]
+
 AUTH_USER_MODEL = 'users.User'  
 
 REST_FRAMEWORK = {
@@ -87,7 +88,7 @@ ALLOWED_HOSTS = ['*']
 WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
 WAGTAIL_USER_CUSTOM_FIELDS=['role']
-
+CSRF_TRUSTED_ORIGINS = ['https://derivatives.fixi.website','https://www.derivatives.fixi.website']
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -130,12 +131,12 @@ WSGI_APPLICATION = "financederivatives.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+#     }
+# }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -147,6 +148,16 @@ DATABASES = {
 #     }
 # }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'defaultdb',
+        'USER': 'doadmin',
+        'PASSWORD': 'AVNS_QJaski0KCFl5fqEfAXt',
+        'HOST': 'db-postgresql-fra1-14315-do-user-16632726-0.c.db.ondigitalocean.com',
+        'PORT': '25060',
+    }
+}
 
 
 # Password validation

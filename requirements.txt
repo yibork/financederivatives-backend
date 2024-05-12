@@ -1,9 +1,13 @@
 Django>=4.2,<5.1
-wagtail==5.0
+wagtail>=6.1,<6.2
+psycopg2
 pandas
 certifi
-google-api-python-client
-google-auth
-django-debug-toolbar
 social-auth-app-django
 requests-oauthlib
+django-debug-toolbar
+djangorestframework-simplejwt
+django-cors-headers
+google-api-python-client
+wagtail_modeladmin
+djangorestframework

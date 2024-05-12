@@ -15,7 +15,7 @@ class User(AbstractUser):
         (NORMAL_USER, 'Normal User'),
     ]
 
-    phone_number = models.CharField(max_length=20, unique=True, default='Unknown')
+    phone_number = models.CharField(max_length=20, unique=False, default='Unknown')
     address = models.CharField(max_length=255, blank=True)
     role = models.CharField(
         max_length=50,

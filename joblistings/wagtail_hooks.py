@@ -1,5 +1,5 @@
 # wagtail_hooks.py
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 from .models import JobPage
 from wagtail import hooks
 #from .views import JobImportView
@@ -10,9 +10,6 @@ from django.conf import settings
 import pandas as pd
 from io import BytesIO
 from django.core.mail import EmailMessage
-
-
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
 class JobPageAdmin(ModelAdmin):
     model = JobPage
@@ -35,7 +32,7 @@ def send_notification(request, page):
             'job_company_description', 'language_requirements', 'salary_range', 'benefits', 'work_hours',
             'remote_work', 'travel_requirements', 'full_description', 'contact_information', 
             'application_link_email', 'how_to_apply', 'post_date', 'start_date', 'ex_current_intern_link',
-            'ex_current_linkedin_link', 'professional_1_name', 'contact_person_1_linkedin', 'mail_professional_1',
+            'ex_current_linkedin_link', 'contact_person_1_name', 'contact_person_1_linkedin', 'mail_professional_1',
             'contact_person_2_name', 'contact_person_2_linkedin', 'contact_person_3_name', 
             'contact_person_3_linkedin', 'link_linkedin_offer'
         ))
