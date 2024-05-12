@@ -1,5 +1,5 @@
 # wagtail_hooks.py
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 from .models import JobPage
 from wagtail import hooks
 #from .views import JobImportView
@@ -10,9 +10,6 @@ from django.conf import settings
 import pandas as pd
 from io import BytesIO
 from django.core.mail import EmailMessage
-
-
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
 class JobPageAdmin(ModelAdmin):
     model = JobPage
