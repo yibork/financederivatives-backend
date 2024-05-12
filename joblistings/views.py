@@ -261,5 +261,18 @@ class JobImportView(FormView):
         return context
 
 class JobPageViewSet(viewsets.ModelViewSet):
-    queryset = JobPage.objects.live().public().order_by('-first_published_at')
     serializer_class = JobPageSerializer
+
+    def get_queryset(self):
+        """
+        Optionally filter the pages to those that are public based on a condition.
+        For example, the condition can be based on a query parameter or a setting.
+        """
+        queryset = JobPage.objects.live()
+
+        # Here we check a condition - for example, checking a query parameter
+        if 'public' in self.request.query_params:
+            # Only return public pages if 'public' query parameter is provided
+            return queryset.public().order_by('-first_published_at')
+        else:
+            return queryset.all()
