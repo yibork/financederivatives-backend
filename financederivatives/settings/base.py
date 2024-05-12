@@ -48,15 +48,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "joblistings",
-    "wagtail.contrib.modeladmin",
+    "jobs",
     "rest_framework",
     'corsheaders',
     'rest_framework.authtoken',
     'debug_toolbar',
     'users',
+    "wagtail_modeladmin",
 
 ]
+
 AUTH_USER_MODEL = 'users.User'  
 
 REST_FRAMEWORK = {
