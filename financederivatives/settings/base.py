@@ -130,12 +130,12 @@ WSGI_APPLICATION = "financederivatives.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+#     }
+# }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -147,6 +147,16 @@ DATABASES = {
 #     }
 # }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'defaultdb',
+        'USER': 'doadmin',
+        'PASSWORD': 'AVNS_QJaski0KCFl5fqEfAXt',
+        'HOST': 'db-postgresql-fra1-14315-do-user-16632726-0.c.db.ondigitalocean.com',
+        'PORT': '25060',
+    }
+}
 
 
 # Password validation
