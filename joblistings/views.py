@@ -28,16 +28,6 @@ from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
 
-# Configure your Google Cloud credentials
-dir_path = os.path.dirname(os.path.realpath(__file__))
-SERVICE_ACCOUNT_FILE =  os.path.join(dir_path, 'secret', 'dashboard-finance-derivatives-0b16f2f20dc3.json')
-SCOPES = ['https://www.googleapis.com/auth/jobs']
-print("Attempting to load credentials from:", SERVICE_ACCOUNT_FILE)
-credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-
-client_service = build('jobs', 'v3', credentials=credentials)
-project_id = 'projects/dashboard-finance-derivatives'
 
 #fetch data from indeed
 def fetch_indeed_jobs(request):
@@ -114,6 +104,17 @@ def post_indeed_jobs_to_google(request):
     #print('Response: ', response)
 
 
+# Configure your Google Cloud credentials
+'''
+dir_path = os.path.dirname(os.path.realpath(__file__))
+SERVICE_ACCOUNT_FILE =  os.path.join(dir_path, 'secret', 'dashboard-finance-derivatives-0b16f2f20dc3.json')
+SCOPES = ['https://www.googleapis.com/auth/jobs']
+print("Attempting to load credentials from:", SERVICE_ACCOUNT_FILE)
+credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+
+client_service = build('jobs', 'v3', credentials=credentials)
+project_id = 'projects/dashboard-finance-derivatives'
         
 @csrf_exempt
 @require_http_methods(["POST"])  # Ensuring only POST requests are handled
@@ -160,6 +161,7 @@ def job_search(request):
     } for job in jobs]
 
     return JsonResponse({'jobs': results})
+'''
 class ExcelUploadView(View):
     def get(self, request, *args, **kwargs):
         # Render the upload form template

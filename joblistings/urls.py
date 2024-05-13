@@ -11,7 +11,7 @@
 # ]
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import job_search, post_indeed_jobs_to_google, fetch_indeed_jobs
+from .views import post_indeed_jobs_to_google, fetch_indeed_jobs #, job_search
 from .views import JobPageViewSet, JobImportView, ExcelUploadView
 
 from django.conf import settings
@@ -20,7 +20,7 @@ router.register(r'jobs', JobPageViewSet, basename='jobpage')
 
 urlpatterns = [
         path('', include(router.urls)),
-    path('job_search/', job_search, name='job_search'),
+#    path('job_search/', job_search, name='job_search'),
     path('job_list/', post_indeed_jobs_to_google, name='job_list'),
     path('job_fetch/', fetch_indeed_jobs, name='job_fetch'),
 ]
