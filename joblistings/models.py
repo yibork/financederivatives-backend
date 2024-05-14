@@ -1,6 +1,6 @@
 from django.db import models
 from wagtail.models import Page
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField
 
 
@@ -17,6 +17,11 @@ class JobIndexPage(Page):
 class JobPage(Page):
     parent_page_types = ['joblistings.JobIndexPage']
     subpage_types = []
+    JOB_TYPE_CHOICES = [
+        ('remote', 'Remote'),
+        ('full time', 'Full Time'),
+        ('part time', 'Part Time'),
+    ]
 
     job_title = models.CharField(max_length=255, blank=True)
     company_name = models.CharField(max_length=255, blank=True)
@@ -24,7 +29,7 @@ class JobPage(Page):
     profile = RichTextField(blank=True)
     position = models.CharField(max_length=255, blank=True)
     coding_language = models.CharField(max_length=255, blank=True)
-    job_type = models.CharField(max_length=255, blank=True)
+    job_type = models.CharField(max_length=255, choices=JOB_TYPE_CHOICES, blank=True)
     industry = models.CharField(max_length=255, blank=True)
     department = models.CharField(max_length=255, blank=True)
     experience_level = models.CharField(max_length=255, blank=True)
@@ -67,47 +72,55 @@ class JobPage(Page):
     link_linkedin_offer = models.URLField(blank=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('job_title'),
-        FieldPanel('company_name'),
-        FieldPanel('location'),
-        FieldPanel('profile'),
-        FieldPanel('position'),
-        FieldPanel('coding_language'),
-        FieldPanel('job_type'),
-        FieldPanel('industry'),
-        FieldPanel('department'),
-        FieldPanel('experience_level'),
-        FieldPanel('education_level'),
-        FieldPanel('skills_required'),
-        FieldPanel('responsibilities'),
-        FieldPanel('job_company_description'),
-        FieldPanel('language_requirements'),
-        FieldPanel('salary_range'),
-        FieldPanel('benefits'),
-        FieldPanel('work_hours'),
-        FieldPanel('remote_work'),
-        FieldPanel('travel_requirements'),
-        FieldPanel('full_description'),
-        FieldPanel('contact_information'),
-        FieldPanel('application_link_email'),
-        FieldPanel('how_to_apply'),
-        FieldPanel('post_date'),
-        FieldPanel('start_date'),
-        FieldPanel('end_date'),
-        FieldPanel('ex_current_intern_link'),
-        FieldPanel('ex_current_linkedin_link'),
-        FieldPanel('contact_person_1_name'),
-        FieldPanel('contact_person_1_role'),
-        FieldPanel('contact_person_1_linkedin'),
-        FieldPanel('mail_professional_1'),
-        FieldPanel('contact_person_2_name'),
-        FieldPanel('contact_person_2_role'),
-        FieldPanel('contact_person_2_linkedin'),
-        FieldPanel('mail_professional_2'),
-        FieldPanel('contact_person_3_name'),
-        FieldPanel('contact_person_3_role'),
-        FieldPanel('contact_person_3_linkedin'),
-        FieldPanel('mail_professional_3'),
+        MultiFieldPanel([
+            FieldPanel('job_title'),
+            FieldPanel('company_name'),
+            FieldPanel('location'),
+            FieldPanel('profile'),
+            FieldPanel('position'),
+            FieldPanel('coding_language'),
+            FieldPanel('job_type'),
+            FieldPanel('industry'),
+            FieldPanel('department'),
+            FieldPanel('experience_level'),
+            FieldPanel('education_level'),
+        ], heading="Job Details"),
+        MultiFieldPanel([
+            FieldPanel('skills_required'),
+            FieldPanel('responsibilities'),
+            FieldPanel('job_company_description'),
+            FieldPanel('language_requirements'),
+            FieldPanel('salary_range'),
+            FieldPanel('benefits'),
+            FieldPanel('work_hours'),
+            FieldPanel('remote_work'),
+            FieldPanel('travel_requirements'),
+            FieldPanel('full_description'),
+            FieldPanel('contact_information'),
+            FieldPanel('application_link_email'),
+            FieldPanel('how_to_apply'),
+        ], heading="Job Description"),
+        MultiFieldPanel([
+            FieldPanel('post_date'),
+            FieldPanel('start_date'),
+            FieldPanel('end_date'),
+            FieldPanel('ex_current_intern_link'),
+            FieldPanel('ex_current_linkedin_link'),
+        ], heading="Dates and Links"),
+        MultiFieldPanel([
+            FieldPanel('contact_person_1_name'),
+            FieldPanel('contact_person_1_role'),
+            FieldPanel('contact_person_1_linkedin'),
+            FieldPanel('mail_professional_1'),
+            FieldPanel('contact_person_2_name'),
+            FieldPanel('contact_person_2_role'),
+            FieldPanel('contact_person_2_linkedin'),
+            FieldPanel('mail_professional_2'),
+            FieldPanel('contact_person_3_name'),
+            FieldPanel('contact_person_3_role'),
+            FieldPanel('contact_person_3_linkedin'),
+            FieldPanel('mail_professional_3'),
+        ], heading="Contact Persons"),
         FieldPanel('link_linkedin_offer'),
     ]
 

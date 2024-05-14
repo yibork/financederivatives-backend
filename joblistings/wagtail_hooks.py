@@ -57,6 +57,14 @@ def send_notification(request, page):
 modeladmin_register(JobPageAdmin)
 
 
+@hooks.register('construct_main_menu')
+def hide_images_menu_item(request, menu_items):
+    menu_items[:] = [item for item in menu_items if item.name != 'help']
+    menu_items[:] = [item for item in menu_items if item.name != 'images']
+    menu_items[:] = [item for item in menu_items if item.name != 'documents']
+@hooks.register('insert_global_admin_css')
+def global_admin_css():
+    return '<link rel="stylesheet" href="/static/css/custom_admin.css">'
 
 # # @hooks.register('register_admin_menu_item')
 # # def register_excel_upload_menu_item():

@@ -1,0 +1,35 @@
+/* static/css/custom_admin.css */
+
+body {
+    background-color: #f4f4f4; /* Background color for the admin interface */
+}
+
+.wagtail-branding {
+    background-color: #04022A; /* Custom branding background color */
+}
+
+.wagtail-logo img {
+    height: 40px; /* Adjust the logo size */
+}
+
+.wagtail-button--primary {
+    background-color: #ef912b; /* Primary button color */
+    border-color: #d9822a;
+}
+
+.wagtail-button--primary:hover {
+    background-color: #cc7a24;
+}
+
+.explorer .sidebar {
+    background-color: #04022A; /* Sidebar background color */
+}
+
+.explorer .sidebar a {
+    color: #ef912b; /* Sidebar link color */
+}
+
+.explorer .sidebar a:hover {
+    background-color: #ef912b;
+    color: #ffffff;
+}

@@ -1,0 +1,13 @@
+/* static/css/custom_icons.css */
+
+.icon.icon-home {
+    background-image: url('/static/icons/custom_home_icon.svg'); /* Path to your custom icon */
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.icon.icon-doc-full {
+    background-image: url('/static/icons/custom_doc_icon.svg'); /* Path to your custom icon */
+    background-size: contain;
+    background-repeat: no-repeat;
+}
