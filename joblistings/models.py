@@ -2,9 +2,11 @@ from django.db import models
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel
 from wagtail.fields import RichTextField
+
+
 class JobIndexPage(Page):
-    subpage_types = ['joblistings.JobPage']  # This allows only JobPage children
-    max_count = 1  # Optional: use if you want only one Job Index Page
+    subpage_types = ['joblistings.JobPage']
+    max_count = 1
 
     content_panels = Page.content_panels + [
         # Add panels for any fields you define on your index page
@@ -14,7 +16,8 @@ class JobIndexPage(Page):
 
 class JobPage(Page):
     parent_page_types = ['joblistings.JobIndexPage']
-    subpage_types = []  # No child pages
+    subpage_types = []
+
     job_title = models.CharField(max_length=255, blank=True)
     company_name = models.CharField(max_length=255, blank=True)
     location = models.CharField(max_length=255, blank=True)
@@ -33,7 +36,7 @@ class JobPage(Page):
     salary_range = models.CharField(max_length=255, blank=True)
     benefits = RichTextField(blank=True)
     work_hours = models.CharField(max_length=255, blank=True)
-    remote_work = models.BooleanField(default=False, blank=True)
+    remote_work = models.BooleanField(default=False)
     travel_requirements = models.CharField(max_length=255, blank=True)
     full_description = RichTextField(blank=True)
     contact_information = RichTextField(blank=True)
@@ -44,20 +47,24 @@ class JobPage(Page):
     end_date = models.DateField(blank=True, null=True)
     ex_current_intern_link = models.URLField(blank=True)
     ex_current_linkedin_link = models.URLField(blank=True)
-    contact_person_1_name = models.CharField(max_length=255, blank=True)
-    contact_person_1_role = models.CharField(max_length=255, blank=True)
-    contact_person_1_linkedin = models.URLField(blank=True)
+    
+    # Contact Persons
+    contact_person_1_name = models.CharField(max_length=255, blank=True, null=True)
+    contact_person_1_role = models.CharField(max_length=255, blank=True, null=True)
+    contact_person_1_linkedin = models.URLField(blank=True, null=True)
     mail_professional_1 = models.EmailField(blank=True)
+    
     contact_person_2_name = models.CharField(max_length=255, blank=True)
     contact_person_2_role = models.CharField(max_length=255, blank=True)
     contact_person_2_linkedin = models.URLField(blank=True)
+    mail_professional_2 = models.EmailField(blank=True)
+    
     contact_person_3_name = models.CharField(max_length=255, blank=True)
     contact_person_3_role = models.CharField(max_length=255, blank=True)
     contact_person_3_linkedin = models.URLField(blank=True)
-    mail_professional_2 = models.EmailField(blank=True)
     mail_professional_3 = models.EmailField(blank=True)
+    
     link_linkedin_offer = models.URLField(blank=True)
-    template = "joblistings/job_page.html"
 
     content_panels = Page.content_panels + [
         FieldPanel('job_title'),
@@ -104,3 +111,4 @@ class JobPage(Page):
         FieldPanel('link_linkedin_offer'),
     ]
 
+    template = "joblistings/job_page.html"

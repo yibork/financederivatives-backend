@@ -53,7 +53,6 @@ def send_notification(request, page):
         )
 
         email.send()
-        print('Email with Excel file sent successfully!')
 
 modeladmin_register(JobPageAdmin)
 
