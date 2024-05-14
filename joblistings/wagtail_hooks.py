@@ -10,6 +10,8 @@ from django.conf import settings
 import pandas as pd
 from io import BytesIO
 from django.core.mail import EmailMessage
+from django.utils.html import format_html
+from django.templatetags.static import static
 
 class JobPageAdmin(ModelAdmin):
     model = JobPage
@@ -65,6 +67,20 @@ def hide_images_menu_item(request, menu_items):
 @hooks.register('insert_global_admin_css')
 def global_admin_css():
     return '<link rel="stylesheet" href="/static/css/custom_admin.css">'
+@hooks.register('insert_editor_css')
+def custom_favicon():
+    return format_html(
+        '<link rel="icon" href="{}" type="image/x-icon">'
+        '<link rel="shortcut icon" href="{}" type="image/x-icon">'
+        '<link rel="apple-touch-icon" sizes="180x180" href="{}">'
+        '<link rel="icon" type="image/png" sizes="32x32" href="{}">'
+        '<link rel="icon" type="image/png" sizes="16x16" href="{}">',
+        static('logo/logo192.png'),
+        static('logo/logo192.png'),
+        static('logo/logo192.png'),
+        static('logo/logo192.png'),
+        static('logo/logo192.png'),
+    )
 
 # # @hooks.register('register_admin_menu_item')
 # # def register_excel_upload_menu_item():
