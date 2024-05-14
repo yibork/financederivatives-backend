@@ -147,16 +147,28 @@ WSGI_APPLICATION = "financederivatives.wsgi.application"
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'defaultdb',
+#         'USER': 'doadmin',
+#         'PASSWORD': 'AVNS_QJaski0KCFl5fqEfAXt',
+#         'HOST': 'db-postgresql-fra1-14315-do-user-16632726-0.c.db.ondigitalocean.com',
+#         'PORT': '25060',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',
-        'USER': 'doadmin',
-        'PASSWORD': 'AVNS_QJaski0KCFl5fqEfAXt',
-        'HOST': 'db-postgresql-fra1-14315-do-user-16632726-0.c.db.ondigitalocean.com',
-        'PORT': '25060',
+        'NAME': 'mydatabase',
+        'USER': 'myuser',
+        'PASSWORD': 'mypassword',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
+
+
 
 
 # Password validation
