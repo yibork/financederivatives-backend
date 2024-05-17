@@ -13,10 +13,10 @@ urlpatterns = [
     path('api/v1/', include('joblistings.urls')),
     path('api/v1/users/', include('users.urls')),
     path("django-admin/", admin.site.urls),
-    path("admin/", include(wagtailadmin_urls)),
+    path('', include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("search/", search_views.search, name="search"),
-    path('', include('wagtail.urls')),
+    path('wagtail', include('wagtail.urls')),
 ]
 
 

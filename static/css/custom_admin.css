@@ -1,0 +1,71 @@
+/* custom_admin.css */
+
+/* Primary and secondary colors for branding */
+:root {
+    --w-color-primary: #04022A; /* Main background and primary elements */
+    --w-color-secondary: #ef912b; /* Accent and secondary elements */
+}
+
+:root, .w-theme-light {
+    --w-color-surface-page: #ffffff; /* Page background */
+    --w-color-surface-header: #f0f0f0; /* Header background */
+    --w-color-surface-menus: #04022A; /* Menu background */
+    --w-color-surface-menu-item-active: #04022A; /* Active menu item background */
+
+    --w-color-text-button: #ffffff; /* Button text color */
+    --w-color-text-label-menus-default: #ffffff; /* Default menu label text color */
+    --w-color-text-label-menus-active: #ef912b; /* Active menu label text color */
+    --w-color-text-label: #0c0c0c; /* General label text color */
+
+    --w-color-icon-primary: #ffffff; /* Primary icon color */
+    --w-color-icon-primary-hover: #ef912b; /* Hover color for primary icons */
+
+    --w-color-border-furniture: #04022A; /* Border color */
+    --w-color-border-field-default: #04022A; /* Field border color */
+}
+
+/* Dark theme customizations */
+.w-theme-dark {
+    --w-color-surface-page: #121212; /* Page background */
+    --w-color-surface-header: #181818; /* Header background */
+    --w-color-surface-menus: #04022A; /* Menu background */
+    --w-color-surface-menu-item-active: #ef912b; /* Active menu item background */
+
+    --w-color-text-button: #ffffff; /* Button text color */
+    --w-color-text-label-menus-default: #ffffff; /* Default menu label text color */
+    --w-color-text-label-menus-active: #04022A; /* Active menu label text color */
+    --w-color-text-label: #e0e0e0; /* General label text color */
+
+    --w-color-icon-primary: #ffffff; /* Primary icon color */
+    --w-color-icon-primary-hover: #ef912b; /* Hover color for primary icons */
+
+    --w-color-border-furniture: #04022A; /* Border color */
+    --w-color-border-field-default: #04022A; /* Field border color */
+}
+
+/* Custom styles for the logo */
+.branding-logo {
+    max-width: 80px; /* Adjust the max-width to fit the original size */
+    height: auto;
+}
+
+/* Sidebar hover effect */
+.sidebar-item:hover, 
+.sidebar-item:focus,
+.sidebar-item:active {
+    color: #ffffff !important; /* Ensure the hover text color is white */
+}
+
+/* Adjust the selector based on your HTML structure */
+.sidebar .menu-item:hover,
+.sidebar .menu-item:focus,
+.sidebar .menu-item:active {
+    color: #ffffff !important; /* Ensure the hover text color is white */
+}
+
+/* Specific sidebar styles for Wagtail admin */
+.wagtail-sidebar .nav-main li a:hover,
+.wagtail-sidebar .nav-main li a:focus,
+.wagtail-sidebar .nav-main li a:active {
+    color: #ffffff !important; /* Ensure the hover text color is white */
+}

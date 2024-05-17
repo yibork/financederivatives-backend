@@ -66,11 +66,10 @@ REST_FRAMEWORK = {
     ),
 }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60*24*30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
-
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': get_random_secret_key(),
     'VERIFYING_KEY': None,
@@ -148,16 +147,28 @@ WSGI_APPLICATION = "financederivatives.wsgi.application"
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'defaultdb',
+#         'USER': 'doadmin',
+#         'PASSWORD': 'AVNS_QJaski0KCFl5fqEfAXt',
+#         'HOST': 'db-postgresql-fra1-14315-do-user-16632726-0.c.db.ondigitalocean.com',
+#         'PORT': '25060',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',
-        'USER': 'doadmin',
-        'PASSWORD': 'AVNS_QJaski0KCFl5fqEfAXt',
-        'HOST': 'db-postgresql-fra1-14315-do-user-16632726-0.c.db.ondigitalocean.com',
-        'PORT': '25060',
+        'NAME': 'mydatabase',
+        'USER': 'myuser',
+        'PASSWORD': 'mypassword',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
+
+
 
 
 # Password validation
@@ -205,6 +216,7 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
+WAGTAIL_APPEND_SLASH = False
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"

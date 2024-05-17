@@ -1,4 +1,5 @@
 # views.py
+from django.forms import ValidationError
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
@@ -7,13 +8,21 @@ from .forms import JobImportForm
 from .models import JobPage, JobIndexPage
 from openpyxl import load_workbook
 from rest_framework.generics import ListAPIView
-from .serializers import JobPageSerializer
+from .serializers import JobPageSerializer,JobPageAddSerializer
 import os
 from django.http import JsonResponse
 from django.views import View
 from django.core.management import call_command
 from django.core.files.storage import default_storage
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.contrib.auth.models import User
+from django.utils.text import slugify
+from .models import JobPage, JobIndexPage
+from django.utils.decorators import method_decorator
 
 # joblistings/views.py
 
@@ -27,17 +36,9 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
+from wagtail.models import Page
+import uuid
 
-# Configure your Google Cloud credentials
-dir_path = os.path.dirname(os.path.realpath(__file__))
-SERVICE_ACCOUNT_FILE =  os.path.join(dir_path, 'secret', 'dashboard-finance-derivatives-0b16f2f20dc3.json')
-SCOPES = ['https://www.googleapis.com/auth/jobs']
-print("Attempting to load credentials from:", SERVICE_ACCOUNT_FILE)
-credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-
-client_service = build('jobs', 'v3', credentials=credentials)
-project_id = 'projects/dashboard-finance-derivatives'
 
 #fetch data from indeed
 def fetch_indeed_jobs(request):
@@ -60,7 +61,75 @@ def fetch_indeed_jobs(request):
         json.dump(data, file, indent=4)
 
     return response.json()
+@method_decorator(csrf_exempt, name='dispatch')
+class JobPageAddViewSet(viewsets.ModelViewSet):
+    queryset = JobPage.objects.all()
+    serializer_class = JobPageAddSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        job_title = request.data.get('job_title')
+        company_name = request.data.get('company_name')
+        location = request.data.get('location')
+        job_type = request.data.get('job_type')
+        contact_person_1_name = request.data.get('contact_person')
+        contact_person_1_linkedin = request.data.get('contact_person_linkedin')
+
+
+        if not job_title or not company_name or not location or not job_type:
+            return Response(
+                {"error": "job_title, company_name, location, and job_type are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Ensure the JobIndexPage exists and is correctly positioned
+        job_index, created = JobIndexPage.objects.get_or_create(
+            title="Job Index Page",
+            defaults={
+                'title': 'Job Index Page',
+                'slug': 'job-index-page',
+                'depth': 1,  # Set the depth for the index page
+                'path': '00010001',  # Set a unique path for the index page
+            }
+        )
+
+        if created:
+            root = Page.get_first_root_node()
+            job_index = root.add_child(instance=job_index)
+        else:
+            job_index = JobIndexPage.objects.get(title="Job Index Page")
+
+        # Generate a unique slug for the job page
+        slug = slugify(job_title) + '-' + str(uuid.uuid4())[:8]  # Ensure uniqueness
+
+        # Set the path and depth for the job page
+        job_page_path = job_index.path + '00102'
+        job_page_depth = job_index.depth + 1
+
+        # Create JobPage instance
+        job_page = JobPage(
+            title=job_title,
+            slug=slug,
+            job_title=job_title,
+            company_name=company_name,
+            location=location,
+            job_type=job_type,
+            contact_person_1_name=contact_person_1_name,
+            contact_person_1_linkedin=contact_person_1_linkedin,
+            owner=user,
+            live=False,
+            path=job_page_path,
+            depth=job_page_depth,
+        )
+
+        try:
+            job_page.full_clean()
+            job_index.add_child(instance=job_page)  # This sets path and depth automatically
+            job_page.unpublish()  # Unpublish the page by default
+            return Response({"message": "Job added successfully."}, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
 
 def transform_to_google_format(indeed_jobs):
     google_jobs = []
@@ -93,7 +162,6 @@ def post_indeed_jobs_to_google(request):
         # Try to open and read the JSON file
         with open(file_path, 'r') as file:
             indeed_jobs = json.load(file)
-        print('Indeed jobs from file: ', indeed_jobs)
         return JsonResponse({'Jobs': indeed_jobs})
     except FileNotFoundError:
         # If the file is not found, perhaps handle it or return an error
@@ -104,7 +172,6 @@ def post_indeed_jobs_to_google(request):
     # rest of the code for case of storing data in
     google_jobs = transform_to_google_format(indeed_jobs)
     body = {"jobs": google_jobs}
-    print('Google jobs: ', google_jobs)
     return JsonResponse({'Jobs': google_jobs})
     # Post jobs to Google Cloud Talent Solution
     #response = client_service.projects().tenants().jobs().batchCreate(
@@ -114,6 +181,17 @@ def post_indeed_jobs_to_google(request):
     #print('Response: ', response)
 
 
+# Configure your Google Cloud credentials
+'''
+dir_path = os.path.dirname(os.path.realpath(__file__))
+SERVICE_ACCOUNT_FILE =  os.path.join(dir_path, 'secret', 'dashboard-finance-derivatives-0b16f2f20dc3.json')
+SCOPES = ['https://www.googleapis.com/auth/jobs']
+print("Attempting to load credentials from:", SERVICE_ACCOUNT_FILE)
+credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+
+client_service = build('jobs', 'v3', credentials=credentials)
+project_id = 'projects/dashboard-finance-derivatives'
         
 @csrf_exempt
 @require_http_methods(["POST"])  # Ensuring only POST requests are handled
@@ -160,6 +238,7 @@ def job_search(request):
     } for job in jobs]
 
     return JsonResponse({'jobs': results})
+'''
 class ExcelUploadView(View):
     def get(self, request, *args, **kwargs):
         # Render the upload form template

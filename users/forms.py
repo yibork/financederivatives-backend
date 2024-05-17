@@ -25,6 +25,10 @@ class CustomUserEditForm(UserEditForm):
         label=_('Picture'),
         required=False,
     )
+    image = forms.ImageField(
+        label=_('Image'),
+        required=False,
+    )
     
 
 class CustomUserCreationForm(UserCreationForm):
@@ -43,5 +47,9 @@ class CustomUserCreationForm(UserCreationForm):
     )
     picture = forms.ImageField(
         label=_('Picture'),
+        required=False,
+    )
+    image = forms.ImageField(
+        label=_('Image'),
         required=False,
     )
