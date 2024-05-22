@@ -13,6 +13,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import post_indeed_jobs_to_google, fetch_indeed_jobs #, job_search
 from .views import JobPageViewSet, JobImportView, ExcelUploadView, JobPageAddViewSet
+from .views import CompanyAutocomplete, CityAutocomplete
 
 from django.conf import settings
 router = DefaultRouter()
@@ -24,6 +25,9 @@ urlpatterns = [
 #    path('job_search/', job_search, name='job_search'),
     path('job_list/', post_indeed_jobs_to_google, name='job_list'),
     path('job_fetch/', fetch_indeed_jobs, name='job_fetch'),
+        path('company-autocomplete/', CompanyAutocomplete.as_view(), name='company-autocomplete'),
+    path('city-autocomplete/', CityAutocomplete.as_view(), name='city-autocomplete'),
+
 ]
 
 # Conditionally add debug toolbar routes in development mode

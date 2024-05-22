@@ -1,39 +1,31 @@
+<!-- joblistings/job_page.html -->
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="job-page">
-    <h1>{{ page.title }}</h1>
-    <p><strong>Company Name:</strong> {{ page.company_name }}</p>
-    <p><strong>Location:</strong> {{ page.location }}</p>
-    <p><strong>Job Type:</strong> {{ page.job_type }}</p>
-    <p><strong>Profile:</strong> {{ page.profile|richtext }}</p>
-    <p><strong>Position:</strong> {{ page.position }}</p>
-    <p><strong>Coding Language:</strong> {{ page.coding_language }}</p>
-    <p><strong>Industry:</strong> {{ page.industry }}</p>
-    <p><strong>Department:</strong> {{ page.department }}</p>
-    <p><strong>Experience Level:</strong> {{ page.experience_level }}</p>
-    <p><strong>Education Level:</strong> {{ page.education_level }}</p>
-    <p><strong>Skills Required:</strong> {{ page.skills_required|richtext }}</p>
-    <p><strong>Responsibilities:</strong> {{ page.responsibilities|richtext }}</p>
-    <p><strong>Company Description:</strong> {{ page.job_company_description|richtext }}</p>
-    <p><strong>Language Requirements:</strong> {{ page.language_requirements }}</p>
-    <p><strong>Salary Range:</strong> {{ page.salary_range }}</p>
-    <p><strong>Benefits:</strong> {{ page.benefits|richtext }}</p>
-    <p><strong>Work Hours:</strong> {{ page.work_hours }}</p>
-    <p><strong>Remote Work:</strong> {{ page.remote_work|yesno:"Yes,No" }}</p>
-    <p><strong>Travel Requirements:</strong> {{ page.travel_requirements }}</p>
-    <p><strong>Full Description:</strong> {{ page.full_description|richtext }}</p>
-    <p><strong>Contact Information:</strong> {{ page.contact_information|richtext }}</p>
-    <p><strong>Application Link/Email:</strong> <a href="{{ page.application_link_email }}">{{ page.application_link_email }}</a></p>
-    <p><strong>How to Apply:</strong> {{ page.how_to_apply|richtext }}</p>
-    <p><strong>Post Date:</strong> {{ page.post_date }}</p>
-    <p><strong>Start Date:</strong> {{ page.start_date }}</p>
-    <p><strong>End Date:</strong> {{ page.end_date }}</p>
-    <p><strong>Current/Ex Intern Link:</strong> <a href="{{ page.ex_current_intern_link }}">{{ page.ex_current_intern_link }}</a></p>
-    <p><strong>Current/Ex LinkedIn Link:</strong> <a href="{{ page.ex_current_linkedin_link }}">{{ page.ex_current_linkedin_link }}</a></p>
-    <p><strong>Contact Person 1:</strong> {{ page.contact_person_1_name }} - {{ page.contact_person_1_role }} - <a href="{{ page.contact_person_1_linkedin }}">{{ page.contact_person_1_linkedin }}</a> - {{ page.mail_professional_1 }}</p>
-    <p><strong>Contact Person 2:</strong> {{ page.contact_person_2_name }} - {{ page.contact_person_2_role }} - <a href="{{ page.contact_person_2_linkedin }}">{{ page.contact_person_2_linkedin }}</a> - {{ page.mail_professional_2 }}</p>
-    <p><strong>Contact Person 3:</strong> {{ page.contact_person_3_name }} - {{ page.contact_person_3_role }} - <a href="{{ page.contact_person_3_linkedin }}">{{ page.contact_person_3_linkedin }}</a> - {{ page.mail_professional_3 }}</p>
-    <p><strong>LinkedIn Offer Link:</strong> <a href="{{ page.link_linkedin_offer }}">{{ page.link_linkedin_offer }}</a></p>
-  </div>
+<h1>{{ page.title }}</h1>
+<p><strong>Company:</strong> {{ page.company_name }}</p>
+{% if page.new_company_name %}
+    <p><strong>New Company:</strong> {{ page.new_company_name }}</p>
+{% endif %}
+<p><strong>Location:</strong> {{ page.location }}</p>
+<p><strong>Start Date:</strong> {{ page.start_date }}</p>
+<p><strong>Contract Type:</strong> {{ page.contract_type }}</p>
+<p><strong>Job Description:</strong> {{ page.job_description|richtext }}</p>
+<p><strong>Notes & Feedbacks:</strong> {{ page.notes_feedbacks|richtext }}</p>
+<p><strong>Language Requirements:</strong> {{ page.language_requirements }}</p>
+<p><strong>Expected Salary:</strong> {{ page.expected_salary }}</p>
+<p><strong>Coding Languages:</strong> {{ page.coding_languages }}</p>
+<p><strong>Asset Class:</strong> {{ page.asset_class }}</p>
+<p><strong>Interview Report Link:</strong> <a href="{{ page.interview_report_link }}">{{ page.interview_report_link }}</a></p>
+
+<h2>Contact Persons</h2>
+<ul>
+    {% for contact in page.contact_persons.all %}
+        <li>
+            <strong>Name:</strong> {{ contact.name }}<br>
+            <strong>LinkedIn:</strong> <a href="{{ contact.linkedin }}">{{ contact.linkedin }}</a><br>
+            <strong>Email:</strong> {{ contact.email }}
+        </li>
+    {% endfor %}
+</ul>
 {% endblock %}

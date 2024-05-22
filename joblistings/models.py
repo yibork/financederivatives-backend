@@ -1,11 +1,24 @@
 from django.db import models
 from wagtail.models import Page
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 from wagtail.fields import RichTextField
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 
+class City(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Company(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
 
 class JobIndexPage(Page):
-    subpage_types = ['joblistings.JobPage']
+    subpage_types = ['JobPage']
     max_count = 1
 
     content_panels = Page.content_panels + [
@@ -13,9 +26,20 @@ class JobIndexPage(Page):
     ]
     template = "joblistings/job_index_page.html"
 
+class ContactPerson(models.Model):
+    job_page = ParentalKey('JobPage', related_name='contact_persons', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
-class JobPage(Page):
-    parent_page_types = ['joblistings.JobIndexPage']
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('linkedin'),
+        FieldPanel('email'),
+    ]
+
+class JobPage(Page, ClusterableModel):
+    parent_page_types = ['JobIndexPage']
     subpage_types = []
     JOB_TYPE_CHOICES = [
         ('remote', 'Remote'),
@@ -23,105 +47,60 @@ class JobPage(Page):
         ('part time', 'Part Time'),
     ]
 
-    job_title = models.CharField(max_length=255, blank=True)
-    company_name = models.CharField(max_length=255, blank=True)
-    location = models.CharField(max_length=255, blank=True)
-    profile = RichTextField(blank=True)
-    position = models.CharField(max_length=255, blank=True)
-    coding_language = models.CharField(max_length=255, blank=True)
-    job_type = models.CharField(max_length=255, choices=JOB_TYPE_CHOICES, blank=True)
     industry = models.CharField(max_length=255, blank=True)
-    department = models.CharField(max_length=255, blank=True)
-    experience_level = models.CharField(max_length=255, blank=True)
-    education_level = models.CharField(max_length=255, blank=True)
-    skills_required = RichTextField(blank=True)
-    responsibilities = RichTextField(blank=True)
-    job_company_description = RichTextField(blank=True)
-    language_requirements = models.CharField(max_length=255, blank=True)
-    salary_range = models.CharField(max_length=255, blank=True)
-    benefits = RichTextField(blank=True)
-    work_hours = models.CharField(max_length=255, blank=True)
-    remote_work = models.BooleanField(default=False)
-    travel_requirements = models.CharField(max_length=255, blank=True)
-    full_description = RichTextField(blank=True)
-    contact_information = RichTextField(blank=True)
-    application_link_email = models.URLField(blank=True)
-    how_to_apply = RichTextField(blank=True)
-    post_date = models.DateField(blank=True, null=True)
+    categories = models.CharField(max_length=255, blank=True)
+    job_title = models.CharField(max_length=255, blank=True)
+    company_name = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True)
+    location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
+    contract_type = models.CharField(max_length=255, choices=JOB_TYPE_CHOICES, blank=True)
+    duration = models.IntegerField(blank=True, null=True, help_text="Duration in months")
     start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-    ex_current_intern_link = models.URLField(blank=True)
-    ex_current_linkedin_link = models.URLField(blank=True)
-    
-    # Contact Persons
-    contact_person_1_name = models.CharField(max_length=255, blank=True, null=True)
-    contact_person_1_role = models.CharField(max_length=255, blank=True, null=True)
-    contact_person_1_linkedin = models.URLField(blank=True, null=True)
-    mail_professional_1 = models.EmailField(blank=True)
-    
-    contact_person_2_name = models.CharField(max_length=255, blank=True)
-    contact_person_2_role = models.CharField(max_length=255, blank=True)
-    contact_person_2_linkedin = models.URLField(blank=True)
-    mail_professional_2 = models.EmailField(blank=True)
-    
-    contact_person_3_name = models.CharField(max_length=255, blank=True)
-    contact_person_3_role = models.CharField(max_length=255, blank=True)
-    contact_person_3_linkedin = models.URLField(blank=True)
-    mail_professional_3 = models.EmailField(blank=True)
-    
-    link_linkedin_offer = models.URLField(blank=True)
+    job_description = RichTextField(blank=True)
+    notes_feedbacks = RichTextField(blank=True)
+    language_requirements = models.CharField(max_length=255, blank=True)
+    expected_salary = models.CharField(max_length=255, blank=True)
+    coding_languages = models.CharField(max_length=255, blank=True)
+    asset_class = models.CharField(max_length=255, blank=True)
+    interview_report_link = models.URLField(blank=True)
+    new_company_name = models.CharField(max_length=255, blank=True, help_text="Add a new company if it's not listed")
+    new_city_name = models.CharField(max_length=255, blank=True, help_text="Add a new city if it's not listed")
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            FieldPanel('industry'),
+            FieldPanel('categories'),
             FieldPanel('job_title'),
             FieldPanel('company_name'),
+            FieldPanel('new_company_name'),
             FieldPanel('location'),
-            FieldPanel('profile'),
-            FieldPanel('position'),
-            FieldPanel('coding_language'),
-            FieldPanel('job_type'),
-            FieldPanel('industry'),
-            FieldPanel('department'),
-            FieldPanel('experience_level'),
-            FieldPanel('education_level'),
+            FieldPanel('new_city_name'),
+            FieldPanel('contract_type'),
+            FieldPanel('duration'),
+            FieldPanel('start_date'),
+            FieldPanel('job_description'),
+            FieldPanel('notes_feedbacks'),
+            FieldPanel('language_requirements'),
+            FieldPanel('expected_salary'),
+            FieldPanel('coding_languages'),
+            FieldPanel('asset_class'),
+            FieldPanel('interview_report_link'),
         ], heading="Job Details"),
         MultiFieldPanel([
-            FieldPanel('skills_required'),
-            FieldPanel('responsibilities'),
-            FieldPanel('job_company_description'),
-            FieldPanel('language_requirements'),
-            FieldPanel('salary_range'),
-            FieldPanel('benefits'),
-            FieldPanel('work_hours'),
-            FieldPanel('remote_work'),
-            FieldPanel('travel_requirements'),
-            FieldPanel('full_description'),
-            FieldPanel('contact_information'),
-            FieldPanel('application_link_email'),
-            FieldPanel('how_to_apply'),
-        ], heading="Job Description"),
-        MultiFieldPanel([
-            FieldPanel('post_date'),
-            FieldPanel('start_date'),
-            FieldPanel('end_date'),
-            FieldPanel('ex_current_intern_link'),
-            FieldPanel('ex_current_linkedin_link'),
-        ], heading="Dates and Links"),
-        MultiFieldPanel([
-            FieldPanel('contact_person_1_name'),
-            FieldPanel('contact_person_1_role'),
-            FieldPanel('contact_person_1_linkedin'),
-            FieldPanel('mail_professional_1'),
-            FieldPanel('contact_person_2_name'),
-            FieldPanel('contact_person_2_role'),
-            FieldPanel('contact_person_2_linkedin'),
-            FieldPanel('mail_professional_2'),
-            FieldPanel('contact_person_3_name'),
-            FieldPanel('contact_person_3_role'),
-            FieldPanel('contact_person_3_linkedin'),
-            FieldPanel('mail_professional_3'),
+            InlinePanel('contact_persons', label="Contact Persons"),
         ], heading="Contact Persons"),
-        FieldPanel('link_linkedin_offer'),
     ]
 
     template = "joblistings/job_page.html"
+
+    def save(self, *args, **kwargs):
+        if self.new_company_name:
+            new_company, created = Company.objects.get_or_create(name=self.new_company_name)
+            self.company_name = new_company
+            self.new_company_name = ''  # Clear the field after saving
+        
+        if self.new_city_name:
+            new_city, created = City.objects.get_or_create(name=self.new_city_name)
+            self.location = new_city
+            self.new_city_name = ''  # Clear the field after saving
+
+        super().save(*args, **kwargs)

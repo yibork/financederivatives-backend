@@ -59,7 +59,7 @@ class VerifyTokenView(APIView):
             return Response({'valid': False, 'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserRoleView(APIView):
-    permission_classes = [IsAuthenticated]  # Ensures that the user must be authenticated
+    permission_classes = [IsAuthenticated]  
 
     def post(self, request):
         """

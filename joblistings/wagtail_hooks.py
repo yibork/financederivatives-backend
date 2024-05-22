@@ -1,8 +1,6 @@
-# wagtail_hooks.py
 from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 from .models import JobPage
 from wagtail import hooks
-#from .views import JobImportView
 from django.urls import path
 from wagtail.admin.menu import MenuItem
 from django.core.mail import send_mail
@@ -20,8 +18,8 @@ class JobPageAdmin(ModelAdmin):
     menu_order = 20  # Order in the admin menu
     add_to_settings_menu = False  # Show in 'Settings' menu
     exclude_from_explorer = False  # Show in 'Explorer' navigation
-    list_display = ('job_title', 'company_name', 'location', 'post_date')
-    search_fields = ('job_title', 'company_name', 'location')
+    list_display = ('job_title', 'company_name', 'location')
+    search_fields = ('job_title', 'company_name__name', 'location__name')
     list_per_page = 10  # Number of jobs displayed per page
 
 @hooks.register('after_create_page')
@@ -29,14 +27,10 @@ def send_notification(request, page):
     if isinstance(page, JobPage):
         # Fetch all jobs from the database
         data = list(JobPage.objects.all().values(
-            'job_title', 'company_name', 'location', 'profile', 'job_type', 'industry', 
-            'department', 'experience_level', 'education_level', 'skills_required', 'responsibilities', 
-            'job_company_description', 'language_requirements', 'salary_range', 'benefits', 'work_hours',
-            'remote_work', 'travel_requirements', 'full_description', 'contact_information', 
-            'application_link_email', 'how_to_apply', 'post_date', 'start_date', 'ex_current_intern_link',
-            'ex_current_linkedin_link', 'contact_person_1_name', 'contact_person_1_linkedin', 'mail_professional_1',
-            'contact_person_2_name', 'contact_person_2_linkedin', 'contact_person_3_name', 
-            'contact_person_3_linkedin', 'link_linkedin_offer'
+            'job_title', 'company_name__name', 'location__name', 'industry', 
+            'categories', 'contract_type', 'duration', 'start_date', 
+            'job_description', 'notes_feedbacks', 'language_requirements', 
+            'expected_salary', 'coding_languages', 'asset_class', 'interview_report_link'
         ))
         df = pd.DataFrame(data)
 
@@ -58,15 +52,21 @@ def send_notification(request, page):
 
 modeladmin_register(JobPageAdmin)
 
-
 @hooks.register('construct_main_menu')
 def hide_images_menu_item(request, menu_items):
-    menu_items[:] = [item for item in menu_items if item.name != 'help']
-    menu_items[:] = [item for item in menu_items if item.name != 'images']
-    menu_items[:] = [item for item in menu_items if item.name != 'documents']
+    menu_items[:] = [item for item in menu_items if item.name not in ['help', 'images', 'documents']]
+
 @hooks.register('insert_global_admin_css')
 def global_admin_css():
     return '<link rel="stylesheet" href="/static/css/custom_admin.css">'
+@hooks.register('insert_editor_js')
+def editor_js():
+    js_files = [
+        '/static/js/enable_new_company.js',  # Update this path
+    ]
+    js_includes = ''.join(['<script src="{}"></script>'.format(static(filename)) for filename in js_files])
+    return js_includes
+
 @hooks.register('insert_editor_css')
 def custom_favicon():
     return format_html(

@@ -2,16 +2,124 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    <ul>
-        {% for job in page.get_children.live %}
-            <li>
-                <a href="{% pageurl job %}">{{ job.job_title }}</a>
-                <p>{{ job.company_name }}</p>
-                <!-- Add other job details you want to list -->
-            </li>
-        {% empty %}
-            <li>No job pages have been created yet.</li>
-        {% endfor %}
-    </ul>
+    <div class="job-index">
+        <h1>{{ page.title }}</h1>
+        <div class="job-actions">
+            <input type="text" class="search-input" placeholder="Search job pages" />
+            <button class="add-job-btn">+ Add job page</button>
+        </div>
+        <ul class="job-list">
+            {% for job in page.get_children.live %}
+                <li class="job-item">
+                    <a href="{% pageurl job %}" class="job-title">{{ job.specific.job_title }}</a>
+                    <p class="company-name">{{ job.specific.company_name }}</p>
+                    <p class="location">{{ job.specific.location }}</p>
+                    <p class="start-date">{{ job.specific.start_date|date:"F j, Y" }}</p>
+                    <div class="job-actions">
+                        <button class="edit-btn">Edit</button>
+                        <button class="copy-btn">Copy</button>
+                        <button class="unpublish-btn">Unpublish</button>
+                        <button class="delete-btn">Delete</button>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="no-jobs">No job pages have been created yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
+
+<style>
+.job-index {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.job-index h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+.job-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.search-input {
+    padding: 10px;
+    font-size: 1em;
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.add-job-btn {
+    background-color: #ff7f0e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.add-job-btn:hover {
+    background-color: #ff5700;
+}
+.job-list {
+    list-style: none;
+    padding: 0;
+}
+.job-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.job-title {
+    font-size: 1.2em;
+    color: #007bff;
+    text-decoration: none;
+}
+.job-title:hover {
+    text-decoration: underline;
+}
+.company-name,
+.location,
+.start-date {
+    margin: 5px 0;
+}
+.job-actions {
+    display: flex;
+    gap: 10px;
+}
+.edit-btn,
+.copy-btn,
+.unpublish-btn,
+.delete-btn {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+.edit-btn:hover {
+    border-color: #007bff;
+    color: #007bff;
+}
+.copy-btn:hover {
+    border-color: #ffa500;
+    color: #ffa500;
+}
+.unpublish-btn:hover {
+    border-color: #ff4500;
+    color: #ff4500;
+}
+.delete-btn:hover {
+    border-color: #ff0000;
+    color: #ff0000;
+}
+.no-jobs {
+    text-align: center;
+    color: #777;
+}
+</style>
