@@ -6,10 +6,7 @@ class JobPageSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
     contact_persons = serializers.SerializerMethodField()
-<<<<<<< Updated upstream
-=======
     contact_interns = serializers.SerializerMethodField()
->>>>>>> Stashed changes
 
     class Meta:
         model = JobPage
