@@ -6,6 +6,10 @@ class JobPageSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
     contact_persons = serializers.SerializerMethodField()
+<<<<<<< Updated upstream
+=======
+    contact_interns = serializers.SerializerMethodField()
+>>>>>>> Stashed changes
 
     class Meta:
         model = JobPage
@@ -17,6 +21,8 @@ class JobPageSerializer(serializers.ModelSerializer):
         return obj.location.name if obj.location else None
     def get_contact_persons(self, obj):
         return obj.contact_persons.all().values()
+    def get_contact_interns(self, obj):
+        return obj.contact_interns.all().values()
 
 class JobPageAddSerializer(serializers.ModelSerializer):
     class Meta:
