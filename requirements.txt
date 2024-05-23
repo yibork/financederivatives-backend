@@ -1,6 +1,6 @@
 Django>=4.2,<5.1
 wagtail>=6.1,<6.2
-psycopg2
+psycopg2-binary
 pandas
 certifi
 social-auth-app-django
