@@ -1,7 +1,7 @@
 [
     {
         "date": "Just posted",
-        "job_title": "Senior Welding Engineer - $80k-$95k",
+        "title": "Senior Welding Engineer - $80k-$95k",
         "company_name": "Kirchhoff Automotive",
         "location": "Waverly, OH 45690",
         "salary": "",
@@ -13,7 +13,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Mechanical Engineer",
+        "title": "Mechanical Engineer",
         "company_name": "UT Health Science Center at San Antonio",
         "location": "San Antonio, TX 78229",
         "salary": "",
@@ -25,7 +25,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Senior Systems Engineer",
+        "title": "Senior Systems Engineer",
         "company_name": "INFINITY SYSTEMS ENGINEERING LLC",
         "location": "Hill AFB, UT 84056",
         "salary": "",
@@ -37,7 +37,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Scheduling & Tracking Analyst-Completions Engineering (Appleton)",
+        "title": "Scheduling & Tracking Analyst-Completions Engineering (Appleton)",
         "company_name": "Gulfstream Aerospace Corporation",
         "location": "Appleton, WI",
         "salary": "",
@@ -49,7 +49,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Design Engineer, Home and Stroller",
+        "title": "Design Engineer, Home and Stroller",
         "company_name": "Newell Brands",
         "location": "Atlanta, GA",
         "salary": "",
@@ -61,7 +61,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Principal Engineer, Digital IC",
+        "title": "Principal Engineer, Digital IC",
         "company_name": "Sonova AG",
         "location": "Illinois",
         "salary": "",
@@ -73,7 +73,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Engineer IV, Process",
+        "title": "Engineer IV, Process",
         "company_name": "Day & Zimmermann",
         "location": "Greenville, SC 29615",
         "salary": "$114,880 - $172,320 a year",
@@ -85,7 +85,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Manager, Substation Protection & Control Engineering",
+        "title": "Manager, Substation Protection & Control Engineering",
         "company_name": "Liberty",
         "location": "Tahoe Vista, CA 96148",
         "salary": "$129,773 - $194,659 a year",
@@ -97,7 +97,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Tooling Engineer / Die Designer",
+        "title": "Tooling Engineer / Die Designer",
         "company_name": "Leatherman Tool Group, Inc",
         "location": "Hybrid work in Portland, OR 97220",
         "salary": "$30 - $57 an hour",
@@ -109,7 +109,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Integration Engineer Level II 2nd shift",
+        "title": "Integration Engineer Level II 2nd shift",
         "company_name": "Blue Origin",
         "location": "Florida",
         "salary": "",
@@ -121,7 +121,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Civil Engineer",
+        "title": "Civil Engineer",
         "company_name": "Chester Valley Engineers",
         "location": "Malvern, PA 19355",
         "salary": "",
@@ -133,7 +133,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Mechanical Design Engineer",
+        "title": "Mechanical Design Engineer",
         "company_name": "GHT Limited Consulting Engineers",
         "location": "Arlington, VA",
         "salary": "",
@@ -145,7 +145,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Senior Modeling and Simulation Engineer",
+        "title": "Senior Modeling and Simulation Engineer",
         "company_name": "INFINITY SYSTEMS ENGINEERING LLC",
         "location": "Hill AFB, UT 84056",
         "salary": "",
@@ -157,7 +157,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Quality Engineer",
+        "title": "Quality Engineer",
         "company_name": "Scepter",
         "location": "Miami, OK 74354",
         "salary": "",
@@ -169,7 +169,7 @@
     },
     {
         "date": "Just posted",
-        "job_title": "Quality Engineer- Metrology",
+        "title": "Quality Engineer- Metrology",
         "company_name": "CelLink Corp",
         "location": "San Carlos, CA",
         "salary": "$42 - $68 an hour",

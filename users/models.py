@@ -15,9 +15,9 @@ class User(AbstractUser):
         (NORMAL_USER, 'Normal User'),
     ]
 
-    phone_number = models.CharField(max_length=20, unique=False, default='Unknown')
+    phone_number = models.CharField(max_length=20, unique=False, default='Unknown',null=True, blank=True)
     address = models.CharField(max_length=255, blank=True)
-    linkedinurl = models.URLField(max_length=255, blank=True)
+    linkedinurl = models.URLField(max_length=255, blank=True, null=True)
     # jobs = models.ManyToManyField('joblistings.Job', related_name='users', blank=True)
     role = models.CharField(
         max_length=50,

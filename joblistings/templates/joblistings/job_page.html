@@ -1,63 +1,32 @@
 <!-- joblistings/job_page.html -->
-{% extends "base.html" %}
-
-{% block content %}
-<div class="job-detail">
+{% load wagtailcore_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ page.title }}</title>
+</head>
+<body>
     <h1>{{ page.title }}</h1>
-    <div class="job-info">
-        <p><strong>Company:</strong> {{ page.company_name }}</p>
-        {% if page.new_company_name %}
-            <p><strong>New Company:</strong> {{ page.new_company_name }}</p>
-        {% endif %}
-        <p><strong>Location:</strong> {{ page.location }}</p>
-        <p><strong>Start Date:</strong> {{ page.start_date|date:"F j, Y" }}</p>
-        <p><strong>Contract Type:</strong> {{ page.contract_type }}</p>
-        <p><strong>Job Description:</strong> {{ page.job_description|richtext }}</p>
-        <p><strong>Notes & Feedbacks:</strong> {{ page.notes_feedbacks|richtext }}</p>
-        <p><strong>Language Requirements:</strong> {{ page.language_requirements }}</p>
-        <p><strong>Expected Salary:</strong> {{ page.expected_salary }}</p>
-        <p><strong>Coding Languages:</strong> {{ page.coding_languages }}</p>
-        <p><strong>Asset Class:</strong> {{ page.asset_class }}</p>
-        <p><strong>Interview Report Link:</strong> <a href="{{ page.interview_report_link }}">{{ page.interview_report_link }}</a></p>
-    </div>
+    <p><strong>Industry:</strong> {{ page.industry }}</p>
+    <p><strong>Categories:</strong> {{ page.categories }}</p>
+    <p><strong>Job Title:</strong> {{ page.job_title }}</p>
+    <p><strong>Company:</strong> {{ page.company_name }}</p>
+    <p><strong>Location:</strong> {{ page.location }}</p>
+    <p><strong>Contract Type:</strong> {{ page.get_contract_type_display }}</p>
+    <p><strong>Duration:</strong> {{ page.duration }} months</p>
+    <p><strong>Month:</strong> {{ page.get_month_display }}</p>
+    <p><strong>Job Description:</strong> {{ page.job_description|richtext }}</p>
+    <p><strong>Notes/Feedbacks:</strong> {{ page.notes_feedbacks|richtext }}</p>
+    <p><strong>Language Requirements:</strong> {{ page.language_requirements }}</p>
+    <p><strong>Expected Salary:</strong> {{ page.expected_salary }} {{ page.currency.code }}</p>
+    <p><strong>Coding Languages:</strong> {{ page.coding_languages }}</p>
+    <p><strong>Asset Class:</strong> {{ page.asset_class }}</p>
+    <p><strong>Interview Report Link:</strong> <a href="{{ page.interview_report_link }}">{{ page.interview_report_link }}</a></p>
     <h2>Contact Persons</h2>
-    <ul class="contact-list">
+    <ul>
         {% for contact in page.contact_persons.all %}
-            <li class="contact-item">
-                <strong>Name:</strong> {{ contact.name }}<br>
-                <strong>LinkedIn:</strong> <a href="{{ contact.linkedin }}">{{ contact.linkedin }}</a><br>
-                <strong>Email:</strong> <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
-            </li>
+        <li>{{ contact.name }} - <a href="{{ contact.linkedin }}">LinkedIn</a> - <a href="mailto:{{ contact.email }}">{{ contact.email }}</a></li>
         {% endfor %}
     </ul>
-</div>
-{% endblock %}
-
-<style>
-.job-detail {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-}
-.job-info p {
-    margin: 10px 0;
-}
-.contact-list {
-    list-style: none;
-    padding: 0;
-}
-.contact-item {
-    margin: 10px 0;
-}
-.contact-item strong {
-    display: inline-block;
-    width: 100px;
-}
-.contact-item a {
-    color: #007bff;
-    text-decoration: none;
-}
-.contact-item a:hover {
-    text-decoration: underline;
-}
-</style>
+</body>
+</html>
