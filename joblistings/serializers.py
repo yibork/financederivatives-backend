@@ -6,6 +6,7 @@ class JobPageSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
     contact_persons = serializers.SerializerMethodField()
+    
 
     class Meta:
         model = JobPage
