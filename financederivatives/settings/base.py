@@ -90,7 +90,7 @@ ALLOWED_HOSTS = ['*']
 WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
 WAGTAIL_USER_CUSTOM_FIELDS=['role']
-CSRF_TRUSTED_ORIGINS = ['https://derivatives.fixi.website','https://www.derivatives.fixi.website']
+CSRF_TRUSTED_ORIGINS = ['https://derivatives.fixi.website','https://www.derivatives.fixi.website','https://admin.derivativesfinance.fr']
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
