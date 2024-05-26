@@ -106,6 +106,11 @@ class ContactPerson(models.Model):
         FieldPanel('linkedin'),
         FieldPanel('email'),
     ]
+class CoddingLanguages(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
 class Industry(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
@@ -123,7 +128,12 @@ class Currency(models.Model):
     code = models.CharField(max_length=3, unique=True)
 
     def __str__(self):
-        return f"{self.code} - {self.name}"
+        return f"{self.code} "
+class Languages(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
 
 class JobPage(Page, ClusterableModel):
     parent_page_types = ['JobIndexPage']
@@ -160,18 +170,18 @@ class JobPage(Page, ClusterableModel):
     month = models.CharField(max_length=2, choices=MONTH_CHOICES, blank=True, null=True)
     job_description = RichTextField(blank=True)
     notes_feedbacks = RichTextField(blank=True)
-    language_requirements = models.CharField(max_length=255, blank=True)
-    expected_salary = models.CharField(max_length=255, blank=True)
+    language_requirements = models.ManyToManyField(Languages, blank=True)
+    expected_salary = models.FloatField(blank=True, null=True)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True, blank=True, related_name='jobs')
     new_currency_code = models.CharField(max_length=3, blank=True, help_text="Currency code (e.g., USD)")
-    coding_languages = models.CharField(max_length=255, blank=True)
+    coding_languages = models.ManyToManyField(CoddingLanguages, blank=True)
     asset_class = models.CharField(max_length=255, blank=True)
     interview_report_link = models.URLField(blank=True)
     new_company_name = models.CharField(max_length=255, blank=True, help_text="Add a new company if it's not listed")
     new_city_name = models.CharField(max_length=255, blank=True, help_text="Add a new city if it's not listed")
     new_industry_name = models.CharField(max_length=255, blank=True, help_text="Add a new industry if it's not listed")
     new_category_name = models.CharField(max_length=255, blank=True, help_text="Add a new category if it's not listed")
-
+    new_language_name = models.CharField(max_length=255, blank=True, help_text="Add a new language if it's not listed")
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('industry'),
@@ -189,6 +199,7 @@ class JobPage(Page, ClusterableModel):
             FieldPanel('job_description'),
             FieldPanel('notes_feedbacks'),
             FieldPanel('language_requirements'),
+            FieldPanel('new_language_name'),
             FieldPanel('expected_salary'),
             FieldPanel('currency'),
             FieldPanel('new_currency_code'),
@@ -208,15 +219,23 @@ class JobPage(Page, ClusterableModel):
     template = "joblistings/job_page.html"
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Call save first to ensure the object exists if it's new
+
         if self.new_company_name:
             new_company, created = Company.objects.get_or_create(name=self.new_company_name)
             self.company_name = new_company
             self.new_company_name = ''  # Clear the field after saving
-        
+
         if self.new_city_name:
             new_city, created = City.objects.get_or_create(name=self.new_city_name)
             self.location = new_city
             self.new_city_name = ''  # Clear the field after saving
+
+        if self.new_language_name:
+            new_language, created = Languages.objects.get_or_create(name=self.new_language_name)
+            # Use set for ManyToMany field to replace all existing entries
+            self.language_requirements.set([new_language])
+            self.new_language_name = ''
 
         if self.new_industry_name:
             new_industry, created = Industry.objects.get_or_create(name=self.new_industry_name)
@@ -233,4 +252,4 @@ class JobPage(Page, ClusterableModel):
             self.currency = new_currency
             self.new_currency_code = ''
 
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)  # Save again to update any changed relations

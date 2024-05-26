@@ -38,7 +38,7 @@ import requests
 import json
 from wagtail.models import Page
 import uuid
-
+from .models import JobPage, JobIndexPage, Company, City, Industry, Category, Currency, ContactPerson, ContactIntern, CoddingLanguages, Languages
 
 #fetch data from indeed
 def fetch_indeed_jobs(request):
@@ -61,36 +61,96 @@ def fetch_indeed_jobs(request):
         json.dump(data, file, indent=4)
 
     return response.json()
-@method_decorator(csrf_exempt, name='dispatch')
+import logging
+logger = logging.getLogger(__name__)
+from django.core.exceptions import ObjectDoesNotExist
+
+def get_or_create_related_model(model, value, new_value_field):
+    """
+    Utility function to get or create a related model instance.
+    :param model: The model class
+    :param value: The existing value or None
+    :param new_value_field: The new value field from the request data
+    :return: The model instance
+    """
+    if new_value_field:
+        instance, _ = model.objects.get_or_create(name=new_value_field)
+    elif value:
+        instance = model.objects.get(pk=value)
+    else:
+        instance = None
+    return instance
+
 class JobPageAddViewSet(viewsets.ModelViewSet):
     queryset = JobPage.objects.all()
     serializer_class = JobPageAddSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        user = request.user
-        job_title = request.data.get('job_title')
-        company_name = request.data.get('company_name')
-        location = request.data.get('location')
-        job_type = request.data.get('job_type')
-        contact_person_1_name = request.data.get('contact_person')
-        contact_person_1_linkedin = request.data.get('contact_person_linkedin')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
 
+        # Handling new entries or lookup existing
+        company = None
+        if data.get('new_company_name'):
+            company, _ = Company.objects.get_or_create(name=data['new_company_name'])
+        elif data.get('company_name'):
+            try:
+                company = data['company_name']
+            except ObjectDoesNotExist:
+                return Response({'company_name': 'Company does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not job_title or not company_name or not location or not job_type:
-            return Response(
-                {"error": "job_title, company_name, location, and job_type are required."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        location = None
+        if data.get('new_city_name'):
+            location, _ = City.objects.get_or_create(name=data['new_city_name'])
+        elif data.get('location'):
+            try:
+                location = data['location']
+            except ObjectDoesNotExist:
+                return Response({'location': 'City does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Ensure the JobIndexPage exists and is correctly positioned
+        industry = None
+        if data.get('new_industry_name'):
+            industry, _ = Industry.objects.get_or_create(name=data['new_industry_name'])
+        elif data.get('industry'):
+            try:
+                industry = data['industry']
+                print(industry)
+            except ObjectDoesNotExist:
+                return Response({'industry': 'Industry does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+        print('yassine')
+        print(industry)
+
+        category = None
+        if data.get('new_category_name'):
+            category, _ = Category.objects.get_or_create(name=data['new_category_name'])
+        elif data.get('categories'):
+            try:
+                category = data['categories']
+            except ObjectDoesNotExist:
+                return Response({'categories': 'Category does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        currency = None
+        if data.get('new_currency_code'):
+            currency, _ = Currency.objects.get_or_create(code=data['new_currency_code'])
+        elif data.get('currency'):
+            try:
+                currency = data['currency']
+            except ObjectDoesNotExist:
+                return Response({'currency': 'Currency does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Use the IDs for both coding_languages and language_requirements
+        coding_languages = [CoddingLanguages.objects.get(pk=id) for id in data.get('coding_languages', [])]
+        language_requirements = [Languages.objects.get(pk=id) for id in data.get('language_requirements', [])]
+
         job_index, created = JobIndexPage.objects.get_or_create(
             title="Job Index Page",
             defaults={
                 'title': 'Job Index Page',
                 'slug': 'job-index-page',
-                'depth': 1,  # Set the depth for the index page
-                'path': '00010001',  # Set a unique path for the index page
+                'depth': 4,  # Set the depth for the index page
+                'path': '0001000100010005',  # Set a unique path for the index page
             }
         )
 
@@ -100,36 +160,67 @@ class JobPageAddViewSet(viewsets.ModelViewSet):
         else:
             job_index = JobIndexPage.objects.get(title="Job Index Page")
 
-        # Generate a unique slug for the job page
-        slug = slugify(job_title) + '-' + str(uuid.uuid4())[:8]  # Ensure uniqueness
+        slug = slugify(data['job_title']) + '-' + str(uuid.uuid4())[:8]
 
-        # Set the path and depth for the job page
-        job_page_path = job_index.path + '00102'
-        job_page_depth = job_index.depth + 1
+        base_path = job_index.path
+        depth = job_index.depth + 1
+        path_suffix = 1
 
-        # Create JobPage instance
+        while True:
+            job_page_path = f"{base_path}{path_suffix:04d}"
+            if not JobPage.objects.filter(path=job_page_path).exists():
+                break
+            path_suffix += 1
         job_page = JobPage(
-            title=job_title,
+            title=data['job_title'],
             slug=slug,
-            job_title=job_title,
-            company_name=company_name,
+            job_title=data['job_title'],
+            company_name=company,
             location=location,
-            job_type=job_type,
-            contact_person_1_name=contact_person_1_name,
-            contact_person_1_linkedin=contact_person_1_linkedin,
-            owner=user,
+            contract_type=data['contract_type'],
+            duration=data['duration'],
+            month=data['month'],
+            job_description=data['job_description'],
+            notes_feedbacks=data['notes_feedbacks'],
+            expected_salary=data['expected_salary'],
+            currency=currency,
+            asset_class=data['asset_class'],
+            interview_report_link=data['interview_report_link'],
+            industry=industry,
+            categories=category,
+            owner=request.user,
             live=False,
             path=job_page_path,
-            depth=job_page_depth,
+            depth=depth,
         )
 
-        try:
-            job_page.full_clean()
-            job_index.add_child(instance=job_page)  # This sets path and depth automatically
-            job_page.unpublish()  # Unpublish the page by default
-            return Response({"message": "Job added successfully."}, status=status.HTTP_201_CREATED)
-        except ValidationError as e:
-            return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
+        job_index.add_child(instance=job_page)
+
+        job_page.save()
+        job_page.coding_languages.set(coding_languages)
+        job_page.language_requirements.set(language_requirements)
+
+        for contact_person_data in data.get('contact_persons', []):
+            contact_person = ContactPerson(
+                job_page=job_page,
+                name=contact_person_data.get('name'),
+                linkedin=contact_person_data.get('linkedin'),
+                email=contact_person_data.get('email')
+            )
+            contact_person.save()
+
+        for contact_intern_data in data.get('contact_interns', []):
+            contact_intern = ContactIntern(
+                job_page=job_page,
+                name=contact_intern_data.get('name'),
+                linkedin=contact_intern_data.get('linkedin'),
+                email=contact_intern_data.get('email')
+            )
+            contact_intern.save()
+
+        job_page.unpublish()
+
+        return Response({"message": "Job added successfully."}, status=status.HTTP_201_CREATED)
 
 def transform_to_google_format(indeed_jobs):
     google_jobs = []
@@ -338,7 +429,6 @@ class JobImportView(FormView):
         context = super().get_context_data(**kwargs)
         # ... additional context data setup ...
         return context
-
 class JobPageViewSet(viewsets.ModelViewSet):
     serializer_class = JobPageSerializer
 

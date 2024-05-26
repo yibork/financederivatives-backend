@@ -90,7 +90,7 @@ ALLOWED_HOSTS = ['*']
 WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
 WAGTAIL_USER_CUSTOM_FIELDS=['role']
-CSRF_TRUSTED_ORIGINS = ['https://derivatives.fixi.website','https://www.derivatives.fixi.website']
+CSRF_TRUSTED_ORIGINS = ['https://derivatives.fixi.website','https://www.derivatives.fixi.website','https://admin.derivativesfinance.fr']
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -133,12 +133,12 @@ WSGI_APPLICATION = "financederivatives.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+#     }
+# }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -160,16 +160,16 @@ DATABASES = {
 #         'PORT': '25060',
 #     }
 # }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'mydatabase',
-#         'USER': 'myuser',
-#         'PASSWORD': 'mypassword',
-#         'HOST': 'db',
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydatabase',
+        'USER': 'myuser',
+        'PASSWORD': 'mypassword',
+        'HOST': 'db',
+        'PORT': '5432',
+    }
+}
 
 
 

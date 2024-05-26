@@ -27,10 +27,11 @@ def send_notification(request, page):
     if isinstance(page, JobPage):
         # Fetch all jobs from the database
         data = list(JobPage.objects.all().values(
-            'job_title', 'company_name__name', 'location__name', 'industry', 
-            'categories', 'contract_type', 'duration', 'start_date', 
-            'job_description', 'notes_feedbacks', 'language_requirements', 
-            'expected_salary', 'coding_languages', 'asset_class', 'interview_report_link'
+            'job_title', 'company_name__name', 'location__name', 'industry__name', 'categories__name', 
+            'contract_type', 'duration', 'month', 'job_description', 'notes_feedbacks', 'language_requirements', 
+            'expected_salary', 'currency__code', 'coding_languages__name', 'asset_class', 'interview_report_link', 
+            'contact_persons__name', 'contact_persons__email', 'contact_persons__linkedin', 
+            'contact_interns__name', 'contact_interns__email', 'contact_interns__linkedin'
         ))
         df = pd.DataFrame(data)
 
