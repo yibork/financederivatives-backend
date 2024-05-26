@@ -43,24 +43,22 @@ from .models import JobPage, JobIndexPage, Company, City, Industry, Category, Cu
 #fetch data from indeed
 def fetch_indeed_jobs(request):
     file_path = 'indeed_jobs.json'
-    url = "https://indeed11.p.rapidapi.com/"
-    payload = {
-        "search_terms": "Engineer",
-        "location": "United States",
-        "page": "1"
-    }
+    url = "https://fresh-linkedin-profile-data.p.rapidapi.com/search-jobs"
+
+    querystring = {"keywords":"finance","geo_code":"105015875","date_posted":"any_time","function_id":"it,sale","industry_code":"4,5","sort_by":"most_relevant","start":"0","easy_apply":"false","under_10_applicants":"false"}
+
     headers = {
-        "content-type": "application/json",
-        "X-RapidAPI-Key": "3cbf12bb91msh67c4b738331dd30p1908c8jsn89e563d7fccb",
-        "X-RapidAPI-Host": "indeed11.p.rapidapi.com"
+        "X-RapidAPI-Key": "1553951a8fmsh55eb3ba4ce640d7p154bf4jsn94276b534269",
+        "X-RapidAPI-Host": "fresh-linkedin-profile-data.p.rapidapi.com"
     }
-    response = requests.post(url, json=payload, headers=headers)
+    response = requests.get(url, headers=headers, params=querystring)
     data = response.json()
     # Save or overwrite the fetched data to a file
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
     return response.json()
+
 import logging
 logger = logging.getLogger(__name__)
 from django.core.exceptions import ObjectDoesNotExist
@@ -234,7 +232,7 @@ def transform_to_google_format(indeed_jobs):
                 "addresses": [job['location']],
                 "requisitionId": uniqId,  # This should be unique
                 "applicationInfo": {
-                    "uris": [job['url']]
+                    "uris": [job['company_linkedin_url']]
                 },
                 "postingPublishTime": "2024-05-10T12:00:00Z",  # Example timestamp
                 "postingExpireTime": "2024-06-10T12:00:00Z"
